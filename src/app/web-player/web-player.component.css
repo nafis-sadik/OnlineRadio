@@ -1,0 +1,42 @@
+#Player{
+    background-color: white;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    height: 300px;
+    width: 300px;
+    position: relative;
+    border-radius: 300px;
+}
+
+#Title{
+    font-family: monospace;
+    font-size: 20px;
+    color: black;
+    text-align: center;
+    border: 0px;
+    margin: 0px;
+    transform: translate(0%, 100%);
+}
+
+#PlayButton{
+    height: 100px;
+    width: 100px;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    color: wheat;
+}
+
+#PlayButton>img{
+    height: 100px;
+    width: 100px;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    cursor: pointer;
+}
