@@ -29,16 +29,84 @@ const playList = [{
     'slogan': 'Wall of Fame',
     'frequency': '92.8'
 }, {
-    'url': 'http://118.179.219.244:8000/;stream/;',
+    'url': 'http://118.179.219.244:8000/;stream',
     'thumb': 'http://dhakafm904.com/assets/images/logo.png',
     'channelName': 'Dhaka FM',
     'slogan': 'Wall of Fame',
     'frequency': '90.4'
+}, {
+    'url': 'http://103.23.42.189:6020/;stream',
+    'thumb': 'http://banglaradio.fm/asset/frontend/images/liveradio/logo.png',
+    'channelName': 'Bangla Radio',
+    'slogan': 'Wall of Fame',
+    'frequency': '95.2'
+}, {
+    'url': 'http://s3.myradiostream.com:14498/;stream',
+    'thumb': 'http://peoplesradio.fm/wp-content/uploads/2019/12/1464080415_pr_logo.png',
+    'channelName': 'Peoples Radio',
+    'slogan': 'Wall of Fame',
+    'frequency': '91.6'
+}, {
+    'url': 'http://182.160.110.180:1020/;stream',
+    'thumb': 'http://radiodhoni.fm/wp-content/uploads/2017/04/Radio-Dhoni-Logo-100-100.png',
+    'channelName': 'Radio Aamar',
+    'slogan': 'Wall of Fame',
+    'frequency': '91.2'
+}, {
+    'url': 'http://str.radiocapital.fm:8000/stream',
+    'thumb': 'http://www.radiocapital.fm/wp-content/uploads/2017/02/capital-FM-Logo-png-1.png',
+    'channelName': 'Radio Capital',
+    'slogan': 'Wall of Fame',
+    'frequency': '94.8'
+}, {
+    'url': 'http://162.254.149.187:9300/;',
+    'thumb': 'https://spicefmbd.com/assets/img/logo-big.png',
+    'channelName': 'Spice FM BD',
+    'slogan': 'Wall of Fame',
+    'frequency': '96.4'
+}, {
+    'url': 'http://128.199.184.111:11331/stream',
+    'thumb': 'http://radiodhol.fm/img/Radio-Dhol-Logo.png',
+    'channelName': 'Radio Dhol',
+    'slogan': 'Wall of Fame',
+    'frequency': '94.0'
+}, {
+    'url': 'http://45.64.135.88:8000/stream1',
+    'thumb': 'http://colours.fm/assets/images/beep.png',
+    'channelName': 'Colours FM',
+    'slogan': 'Wall of Fame',
+    'frequency': '101.6'
+}, {
+    'url': 'http://118.179.215.45:8000/;stream.mp3',
+    'thumb': 'http://www.radioamber.com/media/images/logo.png',
+    'channelName': 'Radio Amber',
+    'slogan': 'Wall of Fame',
+    'frequency': '102.4'
+}, {
+    'url': 'http://103.118.79.134:8000/',
+    'thumb': 'http://radiodinraat.fm/wp-content/uploads/2018/03/Untitled-Up2.gif',
+    'channelName': 'Radio Din Raat',
+    'slogan': 'Wall of Fame',
+    'frequency': '93.6'
+}, {
+    'url': 'http://23.227.169.206:9300/;stream',
+    'thumb': 'http://cityfm96bd.com/assets/images/logo.png',
+    'channelName': 'City FM',
+    'slogan': 'Wall of Fame',
+    'frequency': '96.0'
 }];
 
-let selectedMusic = Math.floor(Math.random() * Math.floor(playList.length));
+let selectedMusic = Math.floor(Math.random() * Math.floor(playList.length - 1));
 const AudioPlayer = new Audio(playList[selectedMusic].url);
 $('document').ready(function () {
+    if(window.innerHeight < 650){
+        $('.player').css('height','100vh');
+    }
+    let i = 0;
+    playList.forEach(element => {
+        $('#ChannelList ul').append('<li onClick="playSelectedRadio(' + i + ')"> <img class = "radio-channel-logo" src="' + element.thumb + '" />' + element.channelName + '</li>');
+        i++;
+    });
     playMusic();
 });
 
@@ -48,40 +116,42 @@ $('#PlayButton').click(() => {
 
 $('#NextMusic').click(() => {
     selectedMusic = selectedMusic < playList.length - 1 ? selectedMusic + 1 : 0;
-    AudioPlayer.src = playList[selectedMusic].url;
     playMusic();
 });
 
 $('#PreviousMusic').click(() => {
     selectedMusic = selectedMusic > 0 ? selectedMusic - 1 : playList.length - 1;
-    AudioPlayer.src = playList[selectedMusic].url;
     playMusic();
 });
 
 const playMusic = () => {
     $('.RadioChannelName').html(playList[selectedMusic].channelName);
     $('.Frequency').html(playList[selectedMusic].frequency);
+    $('#ChannelList ul li').removeClass('activeRadioChannel');
+    $($('#ChannelList ul').children()[selectedMusic]).addClass('activeRadioChannel');
     if(!AudioPlayer.paused){
         AudioPlayer.pause();
         AudioPlayer.currentTime = 0;
-        $('#PlayButton container').removeClass('fa-pause');
-        $('#PlayButton container').addClass('fa-play');
+        $('#PlayButton i').removeClass('fa-pause');
+        $('#PlayButton i').addClass('fa-play');
+        $('.player').removeClass('playing');
+        $('.player').addClass('paused');
     } else {
+        AudioPlayer.src = playList[selectedMusic].url;
         AudioPlayer.play();
-        $('#PlayButton container').removeClass('fa-play');
-        $('#PlayButton container').addClass('fa-pause');
+        $('#PlayButton i').removeClass('fa-play');
+        $('#PlayButton i').addClass('fa-pause');
         $('.cover img').attr('src', playList[selectedMusic].thumb);
+        $('.player').removeClass('paused');
+        $('.player').addClass('playing');
     }
 };
 
-const stop = () => {
-    AudioPlayer.pause();
-    AudioPlayer.currentTime = 0;
-}
-
-const playSelectedRadio = (selection) => {
+const playSelectedRadio = (chanelNumber) => {
     try{
-        selectedMusic = selection;
+        AudioPlayer.pause();
+        selectedMusic = chanelNumber;
+        // AudioPlayer.src = playList[selectedMusic].url;
         playMusic();
     } catch ( err ) { console.log(err) }
 }
